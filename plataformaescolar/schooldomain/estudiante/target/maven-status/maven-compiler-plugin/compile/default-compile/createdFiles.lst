@@ -1,0 +1,6 @@
+com\plataformaescolar\estudiante\EstudianteApplication.class
+com\plataformaescolar\estudiante\controller\EstudianteController.class
+com\plataformaescolar\estudiante\model\Estudiante.class
+com\plataformaescolar\estudiante\service\EstudianteService.class
+com\plataformaescolar\estudiante\repository\EstudianteRepositoryJPA.class
+com\plataformaescolar\estudiante\repository\EstudianteRepository.class

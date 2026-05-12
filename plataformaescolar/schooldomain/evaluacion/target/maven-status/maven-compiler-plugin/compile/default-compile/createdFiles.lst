@@ -1,0 +1,9 @@
+com\plataformaescolar\evaluacion\controller\EvaluacionController.class
+com\plataformaescolar\evaluacion\service\EvaluacionService.class
+com\plataformaescolar\evaluacion\controller\CalificacionController.class
+com\plataformaescolar\evaluacion\model\Evaluacion.class
+com\plataformaescolar\evaluacion\EvaluacionApplication.class
+com\plataformaescolar\evaluacion\model\Calificacion.class
+com\plataformaescolar\evaluacion\repository\CalificacionRepositoryJPA.class
+com\plataformaescolar\evaluacion\repository\EvaluacionRepositoryJPA.class
+com\plataformaescolar\evaluacion\service\CalificacionService.class

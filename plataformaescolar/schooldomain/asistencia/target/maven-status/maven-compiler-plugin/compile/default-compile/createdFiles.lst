@@ -1,0 +1,10 @@
+com\plataformaescolar\asistencia\service\AsistenciaService.class
+com\plataformaescolar\asistencia\AsistenciaApplication.class
+com\plataformaescolar\asistencia\repository\AsistenciaRepository.class
+com\plataformaescolar\asistencia\repository\AsistenciaRepositoryJPA.class
+com\plataformaescolar\asistencia\model\Asistencia.class
+com\plataformaescolar\asistencia\controller\AsistenciaController.class
+com\plataformaescolar\asistencia\controller\ClaseController.class
+com\plataformaescolar\asistencia\repository\ClaseRepositoryJPA.class
+com\plataformaescolar\asistencia\service\ClaseService.class
+com\plataformaescolar\asistencia\model\Clase.class
