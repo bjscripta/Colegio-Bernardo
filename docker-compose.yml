@@ -1,56 +1,55 @@
 version: '3.8'
 
 services:
+  mysql:
+    image: mysql:8.0
+    container_name: colegio-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    networks:
+      - colegio-net
+
   eureka-server:
     build: ./plataformaescolar
-    container_name: eureka-server
     ports:
       - "8761:8761"
+    networks:
+      - colegio-net
     command: mvn spring-boot:run -pl infraestructuredomain/eurekaServer
 
   estudiante-service:
     build: ./plataformaescolar
-    container_name: estudiante-service
     ports:
       - "9091:9091"
-    depends_on:
-      - eureka-server
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - colegio-net
     command: mvn spring-boot:run -pl schooldomain/estudiante
 
   asistencia-service:
     build: ./plataformaescolar
-    container_name: asistencia-service
     ports:
       - "9093:9093"
-    depends_on:
-      - eureka-server
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - colegio-net
     command: mvn spring-boot:run -pl schooldomain/asistencia
 
   evaluacion-service:
     build: ./plataformaescolar
-    container_name: evaluacion-service
     ports:
       - "9092:9092"
-    depends_on:
-      - eureka-server
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - colegio-net
     command: mvn spring-boot:run -pl schooldomain/evaluacion
 
   apigateway:
     build: ./plataformaescolar
-    container_name: api-gateway
     ports:
       - "8080:8080"
-    depends_on:
-      - eureka-server
-      - estudiante-service
-      - asistencia-service
-      - evaluacion-service
-    environment:
-      - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka
+    networks:
+      - colegio-net
     command: mvn spring-boot:run -pl infraestructuredomain/apigateway
+
+networks:
+  colegio-net:
