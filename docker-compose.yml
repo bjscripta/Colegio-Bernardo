@@ -8,11 +8,19 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - colegio-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   eureka-server:
     build: ./plataformaescolar
+    container_name: colegio-eureka
     ports:
       - "8761:8761"
     networks:
@@ -21,35 +29,64 @@ services:
 
   estudiante-service:
     build: ./plataformaescolar
+    container_name: colegio-estudiante
     ports:
       - "9091:9091"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      mysql:
+        condition: service_healthy
     networks:
       - colegio-net
     command: mvn spring-boot:run -pl schooldomain/estudiante
 
   asistencia-service:
     build: ./plataformaescolar
+    container_name: colegio-asistencia
     ports:
       - "9093:9093"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      mysql:
+        condition: service_healthy
     networks:
       - colegio-net
     command: mvn spring-boot:run -pl schooldomain/asistencia
 
   evaluacion-service:
     build: ./plataformaescolar
+    container_name: colegio-evaluacion
     ports:
       - "9092:9092"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      mysql:
+        condition: service_healthy
     networks:
       - colegio-net
     command: mvn spring-boot:run -pl schooldomain/evaluacion
 
   apigateway:
     build: ./plataformaescolar
+    container_name: colegio-gateway
     ports:
       - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      estudiante-service:
+        condition: service_started
+      asistencia-service:
+        condition: service_started
+      evaluacion-service:
+        condition: service_started
     networks:
       - colegio-net
     command: mvn spring-boot:run -pl infraestructuredomain/apigateway
 
 networks:
   colegio-net:
+    driver: bridge
