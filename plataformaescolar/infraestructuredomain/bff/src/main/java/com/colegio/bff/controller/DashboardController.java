@@ -26,7 +26,7 @@ public class DashboardController {
     }
     
     @GetMapping("/dashboard/{estudianteId}")
-    public DashboardDTO getDashboard(@PathVariable Long estudianteId) {
+    public DashboardDTO getDashboard(@PathVariable("estudianteId") Long estudianteId) {
         log.info("Dashboard solicitado para estudiante: {}", estudianteId);
         return agregadorService.getDashboard(estudianteId);
     }
