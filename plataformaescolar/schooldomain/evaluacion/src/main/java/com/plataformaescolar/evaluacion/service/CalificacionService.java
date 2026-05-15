@@ -55,7 +55,7 @@ public class CalificacionService {
         Evaluacion evaluacion = evaluacionRepository.findById(calificacion.getEvaluacionId())
                 .orElseThrow(() -> new RuntimeException("Error, evaluacion no encontrada con id: " + calificacion.getEvaluacionId()));
         if (calificacion.getNota() > evaluacion.getNotaMaxima()) {
-            throw new RuntimeException("Error, la nota no puede ser mayor a 7 " + evaluacion.getNotaMaxima());
+            throw new RuntimeException("Error, la nota no puede ser mayor a " + evaluacion.getNotaMaxima());
         }
         
         return calificacionRepository.save(calificacion);

@@ -36,6 +36,16 @@ public class AsistenciaController {
     public Asistencia buscarAsistencia(@PathVariable("id") Long id) {  
         return asistenciaService.getAsistenciaById(id);
     }
+    
+    @GetMapping("/estudiante/{estudianteId}")
+    public List<Asistencia> buscarPorEstudiante(@PathVariable("estudianteId") Long estudianteId) {
+        return asistenciaService.getAsistenciasByEstudianteId(estudianteId);
+    }
+
+    @GetMapping("/clase/{claseId}")
+    public List<Asistencia> buscarPorClase(@PathVariable("claseId") Long claseId) {
+        return asistenciaService.getAsistenciasByClaseId(claseId);
+    }
 
     @PutMapping("/{id}")
     public Asistencia actualizarAsistencia(@PathVariable("id") Long id, @RequestBody Asistencia asistencia) {  

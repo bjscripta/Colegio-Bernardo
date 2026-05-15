@@ -41,4 +41,12 @@ public class AsistenciaService {
         asistenciaRepository.deleteById(idAsistencia);
         return "Asistencia eliminada";
     }
+    
+    public List<Asistencia> getAsistenciasByEstudianteId(Long estudianteId) {
+        return asistenciaRepository.findByEstudianteId(estudianteId);
+    }
+
+    public List<Asistencia> getAsistenciasByClaseId(Long claseId) {
+        return asistenciaRepository.findByClaseId(claseId);
+    }
 }
