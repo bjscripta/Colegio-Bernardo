@@ -38,4 +38,8 @@ public class EstudianteService {
         estudianteRepository.deleteById(idEstudiante);
         return "Estudiante eliminado";
     }
+    
+    public List<Estudiante> getEstudiantesByCurso(String curso) {
+        return estudianteRepository.findByCurso(curso);
+    }
 }

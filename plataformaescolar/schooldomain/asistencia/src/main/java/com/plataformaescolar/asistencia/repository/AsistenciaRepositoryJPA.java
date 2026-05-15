@@ -5,6 +5,7 @@
 package com.plataformaescolar.asistencia.repository;
 
 import com.plataformaescolar.asistencia.model.Asistencia;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 /**
@@ -13,5 +14,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AsistenciaRepositoryJPA extends JpaRepository<Asistencia, Long> {
-    
+
+    List<Asistencia> findByEstudianteId(Long estudianteId);
+    List<Asistencia> findByClaseId(Long claseId);
 }

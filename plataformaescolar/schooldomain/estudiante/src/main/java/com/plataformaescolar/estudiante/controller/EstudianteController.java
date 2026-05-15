@@ -2,6 +2,7 @@ package com.plataformaescolar.estudiante.controller;
 
 import com.plataformaescolar.estudiante.model.Estudiante;
 import com.plataformaescolar.estudiante.service.EstudianteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,9 +18,14 @@ public class EstudianteController {
     public List<Estudiante> listarEstudiantes() {
         return estudianteService.getEstudiantes();
     }
+    
+    @GetMapping("/curso/{curso}")
+    public List<Estudiante> buscarPorCurso(@PathVariable("curso") String curso) {
+        return estudianteService.getEstudiantesByCurso(curso);
+    }
 
     @PostMapping
-    public Estudiante agregarEstudiante(@RequestBody Estudiante estudiante) {
+    public Estudiante agregarEstudiante(@Valid @RequestBody Estudiante estudiante) {
         return estudianteService.saveEstudiante(estudiante);
     }
 
@@ -29,7 +35,7 @@ public class EstudianteController {
     }
 
     @PutMapping("/{id}")
-    public Estudiante actualizarEstudiante(@PathVariable("id") Long id, @RequestBody Estudiante estudiante) {  
+    public Estudiante actualizarEstudiante(@PathVariable("id") Long id, @Valid @RequestBody Estudiante estudiante) {  
         Estudiante estudianteExistente = estudianteService.getEstudianteById(id);
 
         estudianteExistente.setNombre(estudiante.getNombre());

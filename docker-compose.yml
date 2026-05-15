@@ -87,6 +87,36 @@ services:
       - colegio-net
     command: mvn spring-boot:run -pl infraestructuredomain/apigateway
 
+  bff:
+    build: ./plataformaescolar
+    container_name: colegio-bff
+    ports:
+      - "9000:9000"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      estudiante-service:
+        condition: service_started
+      asistencia-service:
+        condition: service_started
+      evaluacion-service:
+        condition: service_started
+    networks:
+      - colegio-net
+    command: mvn spring-boot:run -pl infraestructuredomain/bff
+
+  keycloakadapter:
+    build: ./plataformaescolar
+    container_name: colegio-keycloak
+    ports:
+      - "8088:8088"
+    depends_on:
+      eureka-server:
+        condition: service_started
+    networks:
+      - colegio-net
+    command: mvn spring-boot:run -pl infraestructuredomain/keycloakadapter
+
 networks:
   colegio-net:
     driver: bridge

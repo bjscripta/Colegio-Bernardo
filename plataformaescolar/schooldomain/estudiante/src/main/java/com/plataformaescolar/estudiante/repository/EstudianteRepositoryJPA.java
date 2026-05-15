@@ -5,6 +5,7 @@
 package com.plataformaescolar.estudiante.repository;
 
 import com.plataformaescolar.estudiante.model.Estudiante;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +15,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface EstudianteRepositoryJPA extends JpaRepository<Estudiante, Long> {
-
+    
+    List<Estudiante> findByCurso(String curso);
+    
+    
 }
