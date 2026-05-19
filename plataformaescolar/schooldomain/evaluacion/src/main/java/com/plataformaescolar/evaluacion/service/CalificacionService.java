@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.plataformaescolar.evaluacion.service;
 
 import com.plataformaescolar.evaluacion.model.Calificacion;
@@ -13,10 +9,6 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import java.util.List;
 
-/**
- *
- * @author esteban
- */
 @Service
 @Transactional
 public class CalificacionService {
@@ -26,6 +18,9 @@ public class CalificacionService {
     
     @Autowired
     public EvaluacionRepositoryJPA evaluacionRepository;
+    
+    @Autowired
+    private EstudianteFacade estudianteFacade; 
 
     public List<Calificacion> getCalificaciones() {
         return calificacionRepository.findAll();
@@ -45,6 +40,10 @@ public class CalificacionService {
     }
 
     public Calificacion saveCalificacion(Calificacion calificacion) {
+        if (!estudianteFacade.existeEstudiante(calificacion.getEstudianteId())) {
+            throw new RuntimeException("Error: El estudiante con ID " + calificacion.getEstudianteId() + " no existe");
+        }
+        
         if (calificacion.getNota() == null) {
             throw new RuntimeException("Error, la nota es obligatoria");
         }
@@ -54,6 +53,7 @@ public class CalificacionService {
         
         Evaluacion evaluacion = evaluacionRepository.findById(calificacion.getEvaluacionId())
                 .orElseThrow(() -> new RuntimeException("Error, evaluacion no encontrada con id: " + calificacion.getEvaluacionId()));
+        
         if (calificacion.getNota() > evaluacion.getNotaMaxima()) {
             throw new RuntimeException("Error, la nota no puede ser mayor a " + evaluacion.getNotaMaxima());
         }

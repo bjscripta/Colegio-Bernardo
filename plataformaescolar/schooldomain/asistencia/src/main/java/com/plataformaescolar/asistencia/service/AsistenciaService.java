@@ -1,8 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package com.plataformaescolar.asistencia.service;
 
 import com.plataformaescolar.asistencia.model.Asistencia;
@@ -12,17 +7,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 
-/**
- *
- * @author bjcan
- */
-
 @Service
 @Transactional
 public class AsistenciaService {
 
     @Autowired
     public AsistenciaRepositoryJPA asistenciaRepository;
+    
+    @Autowired
+    private EstudianteFacade estudianteFacade; 
 
     public List<Asistencia> getAsistencias() {
         return asistenciaRepository.findAll();
@@ -34,6 +27,10 @@ public class AsistenciaService {
     }
 
     public Asistencia saveAsistencia(Asistencia asistencia) {
+        // ← AGREGAR VALIDACIÓN
+        if (!estudianteFacade.existeEstudiante(asistencia.getEstudianteId())) {
+            throw new RuntimeException("Error: El estudiante con ID " + asistencia.getEstudianteId() + " no existe");
+        }
         return asistenciaRepository.save(asistencia);
     }
 
