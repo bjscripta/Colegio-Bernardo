@@ -3,10 +3,10 @@
 ## Tecnologías
 
 - Java 17
-- Spring Boot 3.2.5
-- Spring Cloud 2023.0.0
+- Spring Boot 
+- Spring Cloud 
 - Spring Data JPA
-- MySQL 8.0
+- MySQL 
 - Maven
 - Docker
 
