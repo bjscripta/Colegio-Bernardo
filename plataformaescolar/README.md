@@ -77,20 +77,21 @@ API Gateway	http://localhost:8080/estudiante
 docker-compose down
 ```
 
-### 🔗 Endpoints principales
+## 🔗 Endpoints principales
 
-Endpoint	                Método	  Descripción
-/estudiante	              GET	      Listar estudiantes
-/estudiante	              POST	    Crear estudiante
-/estudiante/{id}	        GET	      Buscar estudiante
-/asistencia	              GET	      Listar asistencias
-/asistencia	              POST	    Crear asistencia
-/asistencia/estudiante/{id}	GET	    Asistencias por estudiante
-/evaluacion	              GET	      Listar evaluaciones
-/evaluacion	              POST	    Crear evaluacion
-/calificacion	            POST	    Registrar nota
-/calificacion/estudiante/{id}	GET	  Notas por estudiante
-/bff/dashboard/{id}	      GET	      Dashboard completo
+| Endpoint | Método | Descripción |
+|----------|--------|-------------|
+| `/estudiante` | GET | Listar estudiantes |
+| `/estudiante` | POST | Crear estudiante |
+| `/estudiante/{id}` | GET | Buscar estudiante |
+| `/asistencia` | GET | Listar asistencias |
+| `/asistencia` | POST | Crear asistencia |
+| `/asistencia/estudiante/{id}` | GET | Asistencias por estudiante |
+| `/evaluacion` | GET | Listar evaluaciones |
+| `/evaluacion` | POST | Crear evaluacion |
+| `/calificacion` | POST | Registrar nota |
+| `/calificacion/estudiante/{id}` | GET | Notas por estudiante |
+| `/bff/dashboard/{id}` | GET | Dashboard completo |
 
 ### 🧪 Pruebas unitarias
 ```
