@@ -1,12 +1,13 @@
-# 🏫 Plataforma de Gestión Escolar - Colegio Bernardo O'Higgins
+### Plataforma de Gestión Escolar - Colegio Bernardo O'Higgins
 
 Sistema de gestión escolar basado en microservicios con Spring Boot y React.
 
-## 🚀 Ejecución rápida
+### 🚀 Ejecución rápida
 
 ### Requisitos
 - Docker Desktop
 - Node.js (para frontend local)
+- Git
 
 ## Tecnologías
 - Java 17
