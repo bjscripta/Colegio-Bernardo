@@ -2,6 +2,10 @@
 
 Sistema de gestión escolar basado en microservicios con Spring Boot y React.
 
+###Autores
+- Solange Labbé
+- Benjamín Candia
+
 ### 🚀 Ejecución rápida
 
 ### Requisitos
