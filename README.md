@@ -9,7 +9,7 @@ Sistema de gestión escolar basado en microservicios con Spring Boot y React.
 - Node.js (para frontend local)
 - Git
 
-## Tecnologías
+### Tecnologías
 - Java 17
 - Spring Boot 
 - Spring Cloud 
@@ -17,6 +17,16 @@ Sistema de gestión escolar basado en microservicios con Spring Boot y React.
 - MySQL 
 - Maven
 - Docker
+
+📁 Estructura
+```
+Colegio-Bernardo/
+├── plataformaescolar/      # Backend (microservicios)
+│   ├── schooldomain/       # Estudiante, Asistencia, Evaluacion
+│   └── infraestructuredomain/ # Eureka, Gateway, BFF
+├── frontend-app/           # React
+└── docker-compose.yml
+```
 
 ### Levantar el backend (Docker)
 
@@ -43,12 +53,3 @@ npm start
 | 🚪 API Gateway | 8080 | Punto de entrada único |
 | 🔗 BFF | 9000 | Backend For Frontend |
 
-📁 Estructura
-```
-Colegio-Bernardo/
-├── plataformaescolar/      # Backend (microservicios)
-│   ├── schooldomain/       # Estudiante, Asistencia, Evaluacion
-│   └── infraestructuredomain/ # Eureka, Gateway, BFF
-├── frontend-app/           # React
-└── docker-compose.yml
-```
