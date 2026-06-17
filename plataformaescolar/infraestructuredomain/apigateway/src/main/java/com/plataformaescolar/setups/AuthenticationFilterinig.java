@@ -39,9 +39,12 @@ public class AuthenticationFilterinig  extends AbstractGatewayFilterFactory<Auth
     @Override
     public GatewayFilter apply(Config config) {
         log.info("Global GatewayFilter Filtering Executed");
-               return new OrderedGatewayFilter((exchange, chain) -> {  
+               return new OrderedGatewayFilter((exchange, chain) -> {
+             if (exchange.getRequest().getMethod() != null && "OPTIONS".equalsIgnoreCase(exchange.getRequest().getMethod().name())) {
+                        return chain.filter(exchange);
+             }
              if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                        log.info("Error de Header");  
+                        log.info("Error de Header");
                         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing  Authorization header");
              }
              

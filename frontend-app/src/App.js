@@ -1,73 +1,113 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
 import Home from './pages/Home';
 import Estudiantes from './pages/Estudiantes';
 import Asistencia from './pages/Asistencia';
 import Evaluaciones from './pages/Evaluaciones';
-import Login from './pages/Login';
+import './App.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [currentPage, setCurrentPage] = useState('home');
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+    const renderPage = () => {
+        switch (currentPage) {
+            case 'home':
+                return <Home />;
+            case 'estudiantes':
+                return <Estudiantes />;
+            case 'asistencia':
+                return <Asistencia />;
+            case 'evaluaciones':
+                return <Evaluaciones />;
+            default:
+                return <Home />;
+        }
+    };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
-  };
+    return (
+        <div className="App" style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f3f4f6' }}>
+            {/* Sidebar */}
+            <aside style={sidebarStyle}>
+                <div style={{ padding: '20px', borderBottom: '2px solid #e5e7eb' }}>
+                    <h1 style={{ margin: '0', fontSize: '1.5rem', color: '#1f2937' }}>🎓 Colegio</h1>
+                    <p style={{ margin: '5px 0 0 0', color: '#6b7280', fontSize: '0.85rem' }}>Sistema de Gestión</p>
+                </div>
+                
+                <nav style={{ padding: '20px 0' }}>
+                    {[
+                        { id: 'home', label: '🏠 Inicio', icon: 'home' },
+                        { id: 'estudiantes', label: '👨‍🎓 Estudiantes', icon: 'users' },
+                        { id: 'asistencia', label: '✅ Asistencia', icon: 'check' },
+                        { id: 'evaluaciones', label: '📝 Evaluaciones', icon: 'book' }
+                    ].map(item => (
+                        <button
+                            key={item.id}
+                            onClick={() => setCurrentPage(item.id)}
+                            style={{
+                                ...navItemStyle,
+                                backgroundColor: currentPage === item.id ? '#dbeafe' : 'transparent',
+                                borderLeft: currentPage === item.id ? '4px solid #3b82f6' : '4px solid transparent',
+                                color: currentPage === item.id ? '#1e40af' : '#6b7280',
+                            }}
+                        >
+                            {item.label}
+                        </button>
+                    ))}
+                </nav>
 
-  if (!isAuthenticated) {
-    return <Login onLoginSuccess={() => setIsAuthenticated(true)} />;
-  }
+                <div style={{ 
+                    position: 'absolute', 
+                    bottom: '20px', 
+                    left: '20px', 
+                    right: '20px',
+                    padding: '15px',
+                    backgroundColor: '#eff6ff',
+                    borderRadius: '8px',
+                    borderLeft: '4px solid #3b82f6',
+                    fontSize: '0.85rem',
+                    color: '#1e40af'
+                }}>
+                    <strong>ℹ️ Información:</strong>
+                    <p style={{ margin: '5px 0 0 0' }}>Backend conectado en puerto 8080</p>
+                </div>
+            </aside>
 
-  const navLinkStyle = ({ isActive }) => ({
-    color: 'white',
-    textDecoration: 'none',
-    fontWeight: isActive ? 'bold' : '500',
-    fontSize: '1.1rem',
-    padding: '8px 16px',
-    borderRadius: '8px',
-    transition: 'all 0.3s ease',
-    backgroundColor: isActive ? 'rgba(255, 255, 255, 0.2)' : 'transparent',
-    borderBottom: isActive ? '3px solid #60a5fa' : '3px solid transparent',
-  });
-
-  return (
-    <Router>
-      <div style={{ fontFamily: '"Segoe UI", Roboto, Arial, sans-serif', backgroundColor: '#f4f6f9', minHeight: '100vh' }}>
-        
-        <nav style={{ backgroundColor: '#1e3a8a', padding: '15px 30px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', boxShadow: '0 4px 6px rgba(0,0,0,0.1)', position: 'sticky', top: 0, zIndex: 1000 }}>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <h2 style={{ margin: '0 40px 0 0', color: '#60a5fa', letterSpacing: '1px' }}>🏫 EduManager</h2>
-            <div style={{ display: 'flex', gap: '10px' }}>
-              <NavLink to="/" style={navLinkStyle}>Inicio</NavLink>
-              <NavLink to="/estudiantes" style={navLinkStyle}>Estudiantes</NavLink>
-              <NavLink to="/asistencia" style={navLinkStyle}>Asistencia</NavLink>
-              <NavLink to="/evaluaciones" style={navLinkStyle}>Evaluaciones</NavLink>
-            </div>
-          </div>
-          
-          <button onClick={handleLogout} style={{ backgroundColor: '#ef4444', color: 'white', border: 'none', padding: '8px 15px', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}>
-            Cerrar Sesión
-          </button>
-        </nav>
-
-        <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '30px 20px' }}>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/estudiantes" element={<Estudiantes />} />
-            <Route path="/asistencia" element={<Asistencia />} />
-            <Route path="/evaluaciones" element={<Evaluaciones />} />
-          </Routes>
+            {/* Main Content */}
+            <main style={mainStyle}>
+                <div style={{ backgroundColor: 'white', borderRadius: '12px', padding: '40px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
+                    {renderPage()}
+                </div>
+            </main>
         </div>
-      </div>
-    </Router>
-  );
+    );
 }
+
+const sidebarStyle = {
+    width: '280px',
+    backgroundColor: 'white',
+    boxShadow: '2px 0 4px rgba(0,0,0,0.05)',
+    display: 'flex',
+    flexDirection: 'column',
+    position: 'relative',
+    minHeight: '100vh'
+};
+
+const navItemStyle = {
+    display: 'block',
+    width: '100%',
+    padding: '15px 20px',
+    border: 'none',
+    background: 'none',
+    cursor: 'pointer',
+    textAlign: 'left',
+    fontSize: '1rem',
+    transition: 'all 0.3s ease',
+    fontWeight: '500'
+};
+
+const mainStyle = {
+    flex: 1,
+    padding: '40px',
+    overflowY: 'auto'
+};
 
 export default App;
