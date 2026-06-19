@@ -105,6 +105,18 @@ services:
       - colegio-net
     command: mvn spring-boot:run -pl infraestructuredomain/bff
 
+  keycloak-server:
+    image: quay.io/keycloak/keycloak:24.0.5
+    container_name: colegio-keycloak-server
+    ports:
+      - "8091:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    networks:
+      - colegio-net
+    command: start-dev
+
   keycloakadapter:
     build: ./plataformaescolar
     container_name: colegio-keycloak
@@ -112,6 +124,8 @@ services:
       - "8088:8088"
     depends_on:
       eureka-server:
+        condition: service_started
+      keycloak-server:
         condition: service_started
     networks:
       - colegio-net

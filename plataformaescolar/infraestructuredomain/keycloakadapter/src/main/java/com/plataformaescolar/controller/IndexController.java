@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.plataformaescolar.dto.LoginRequest;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 public class IndexController {
@@ -73,8 +75,8 @@ public class IndexController {
     }
 
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> login(String username, String password) {
-        String login = restService.login(username, password);
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        String login = restService.login(request.getUsername(), request.getPassword());
         return ResponseEntity.ok(login);
     }
 

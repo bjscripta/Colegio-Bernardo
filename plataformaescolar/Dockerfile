@@ -8,6 +8,6 @@ COPY infraestructuredomain ./infraestructuredomain
 
 RUN mvn clean package -DskipTests
 
-EXPOSE 8761 9091 9092 9093 8080 9000
+EXPOSE 8761 9091 9092 9093 8080 9000 8088
 
 CMD ["mvn", "spring-boot:run"]

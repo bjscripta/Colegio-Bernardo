@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BFF_URL = 'http://localhost:9000/bff';
+const BFF_URL = 'http://localhost:8080/bff';
 
 const bffService = {
     healthCheck: async () => {
