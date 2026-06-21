@@ -1,26 +1,21 @@
 import axios from 'axios';
+import { getAuthHeaders } from './authService';
 
 const BFF_URL = 'http://localhost:8080/bff';
 
 const bffService = {
     healthCheck: async () => {
-        try {
-            const response = await axios.get(`${BFF_URL}/health`);
-            return response.data;
-        } catch (error) {
-            console.error('BFF no disponible', error);
-            return null;
-        }
+        const response = await axios.get(`${BFF_URL}/health`, {
+            headers: getAuthHeaders()
+        });
+        return response.data;
     },
 
     getDashboard: async (estudianteId) => {
-        try {
-            const response = await axios.get(`${BFF_URL}/dashboard/${estudianteId}`);
-            return response.data;
-        } catch (error) {
-            console.error('Error al obtener dashboard', error);
-            throw error;
-        }
+        const response = await axios.get(`${BFF_URL}/dashboard/${estudianteId}`, {
+            headers: getAuthHeaders()
+        });
+        return response.data;
     }
 };
 

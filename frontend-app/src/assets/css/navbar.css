@@ -1,10 +1,14 @@
 .app-navbar {
+    position: relative;
+    z-index: 10;
     background-color: #ffffff;
     padding: 18px 40px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 24px;
+    border-bottom: 1px solid #e5eaf2;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.10);
 }
 
 .app-navbar-brand {
@@ -12,11 +16,14 @@
     font-size: 24px;
     font-weight: 800;
     text-decoration: none;
+    white-space: nowrap;
 }
 
 .app-navbar-links {
     display: flex;
-    gap: 20px;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 18px;
     flex-wrap: wrap;
 }
 
@@ -41,15 +48,42 @@
     background-color: #f2c94c;
 }
 
-@media (max-width: 800px) {
+.app-navbar-login {
+    padding: 8px 12px;
+    color: #1e3a8a !important;
+    background-color: #eef2ff;
+    border-radius: 6px;
+}
+
+.app-navbar-login:hover::after {
+    display: none;
+}
+
+.app-navbar-session {
+    padding: 8px 12px;
+    border: 1px solid #c7d2fe;
+    border-radius: 6px;
+    color: #1e3a8a;
+    background: #eef2ff;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.app-navbar-session:hover {
+    background: #dbeafe;
+}
+
+@media (max-width: 900px) {
     .app-navbar {
         padding: 18px 20px;
         flex-direction: column;
-        gap: 14px;
+        align-items: center;
         text-align: center;
     }
 
     .app-navbar-links {
         justify-content: center;
+        gap: 14px;
     }
 }

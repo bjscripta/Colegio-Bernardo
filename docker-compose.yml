@@ -69,23 +69,34 @@ services:
       - colegio-net
     command: mvn spring-boot:run -pl schooldomain/evaluacion
 
-  apigateway:
-    build: ./plataformaescolar
-    container_name: colegio-gateway
+  keycloak-server:
+    image: quay.io/keycloak/keycloak:24.0.5
+    container_name: colegio-keycloak-server
     ports:
-      - "8080:8080"
+      - "8091:8080"
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    networks:
+      - colegio-net
+    command: start-dev --import-realm
+
+  keycloakadapter:
+    build: ./plataformaescolar
+    container_name: colegio-keycloak
+    ports:
+      - "8088:8088"
     depends_on:
       eureka-server:
         condition: service_started
-      estudiante-service:
-        condition: service_started
-      asistencia-service:
-        condition: service_started
-      evaluacion-service:
+      keycloak-server:
         condition: service_started
     networks:
       - colegio-net
-    command: mvn spring-boot:run -pl infraestructuredomain/apigateway
+    command: mvn spring-boot:run -pl infraestructuredomain/keycloakadapter
 
   bff:
     build: ./plataformaescolar
@@ -105,32 +116,42 @@ services:
       - colegio-net
     command: mvn spring-boot:run -pl infraestructuredomain/bff
 
-  keycloak-server:
-    image: quay.io/keycloak/keycloak:24.0.5
-    container_name: colegio-keycloak-server
-    ports:
-      - "8091:8080"
-    environment:
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-    networks:
-      - colegio-net
-    command: start-dev
-
-  keycloakadapter:
+  apigateway:
     build: ./plataformaescolar
-    container_name: colegio-keycloak
+    container_name: colegio-gateway
     ports:
-      - "8088:8088"
+      - "8080:8080"
     depends_on:
       eureka-server:
         condition: service_started
-      keycloak-server:
+      estudiante-service:
+        condition: service_started
+      asistencia-service:
+        condition: service_started
+      evaluacion-service:
+        condition: service_started
+      keycloakadapter:
+        condition: service_started
+      bff:
         condition: service_started
     networks:
       - colegio-net
-    command: mvn spring-boot:run -pl infraestructuredomain/keycloakadapter
+    command: mvn spring-boot:run -pl infraestructuredomain/apigateway
+
+  frontend:
+    build: ./frontend-app
+    container_name: colegio-frontend
+    ports:
+      - "5000:80"
+    depends_on:
+      apigateway:
+        condition: service_started
+    networks:
+      - colegio-net
 
 networks:
   colegio-net:
     driver: bridge
+
+volumes:
+  keycloak-data:

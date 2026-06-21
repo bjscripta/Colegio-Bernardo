@@ -22,9 +22,9 @@ public class AuthenticationFilterinig extends AbstractGatewayFilterFactory<Authe
 
     private static final Logger log = LoggerFactory.getLogger(AuthenticationFilterinig.class);
 
-    public AuthenticationFilterinig(WebClient.Builder _webClientBuilder) {
+    public AuthenticationFilterinig(WebClient.Builder webClientBuilder) {
         super(AuthenticationFilterinig.Config.class);
-        this.webclientBuilder = _webClientBuilder;
+        this.webclientBuilder = webClientBuilder;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class AuthenticationFilterinig extends AbstractGatewayFilterFactory<Authe
 
         return new OrderedGatewayFilter((exchange, chain) -> {
             if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                log.info("Error de Header");
+                log.info("Authorization header missing");
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Missing Authorization header");
             }
 
@@ -41,33 +41,44 @@ public class AuthenticationFilterinig extends AbstractGatewayFilterFactory<Authe
             String[] parts = authHeader.split(" ");
 
             if (parts.length != 2 || !"Bearer".equals(parts[0])) {
-                log.info("Error de Bearer");
+                log.info("Invalid Bearer token structure");
                 throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Bad Authorization structure");
             }
 
             return webclientBuilder.build()
-                .get()
-                .uri("http://KEYCLOAKADAPTER/roles")
-                .header(HttpHeaders.AUTHORIZATION, parts[1])
-                .retrieve()
-                .bodyToMono(JsonNode.class)
-                .map(response -> {
-                    if (response != null) {
-                        log.info("See Objects: " + response);
-
-                        if (response.get("docentes") == null || StringUtils.isEmpty(response.get("docentes").asText())) {
-                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Role docentes missing");
+                    .get()
+                    .uri("http://KEYCLOAKADAPTER/roles")
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + parts[1])
+                    .retrieve()
+                    .bodyToMono(JsonNode.class)
+                    .map(response -> {
+                        if (response == null) {
+                            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Roles missing");
                         }
-                    } else {
-                        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Roles missing");
-                    }
 
-                    return exchange;
-                })
-                .onErrorMap(error -> {
-                    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Communication Error", error.getCause());
-                })
-                .flatMap(chain::filter);
+                        log.info("Roles received: " + response);
+
+                        boolean tieneRolDocente = response.get("docentes") != null
+                                && !StringUtils.isEmpty(response.get("docentes").asText());
+
+                        boolean tieneRolAdministrador = response.get("administradores") != null
+                                && !StringUtils.isEmpty(response.get("administradores").asText());
+
+                        if (!tieneRolDocente && !tieneRolAdministrador) {
+                            throw new ResponseStatusException(
+                                    HttpStatus.UNAUTHORIZED,
+                                    "Role docentes or administradores missing"
+                            );
+                        }
+
+                        return exchange;
+                    })
+                    .onErrorMap(error -> new ResponseStatusException(
+                            HttpStatus.UNAUTHORIZED,
+                            "Authentication error",
+                            error
+                    ))
+                    .flatMap(chain::filter);
         }, 1);
     }
 
