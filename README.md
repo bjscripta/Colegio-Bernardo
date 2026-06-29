@@ -32,18 +32,11 @@ Colegio-Bernardo/
 └── docker-compose.yml
 ```
 
-### Levantar el backend (Docker)
+### Levantar el Proyecto
 
 ```bash
 cd E:\Colegio-Bernardo
 docker-compose up --build
-```
-### Levantar el frontend
-
-```
-cd frontend-app
-npm install
-npm start
 ```
 
 ## 🎯 Microservicios
